@@ -1,3 +1,22 @@
+#restart-btn {
+    background: linear-gradient(90deg, #4caf50 40%, #81c784 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 12px 32px;
+    margin-top: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#restart-btn:active {
+    background: linear-gradient(90deg, #388e3c 40%, #66bb6a 100%);
+    transform: scale(0.97);
+}
+
 html,
 body {
     height: 100vh;
