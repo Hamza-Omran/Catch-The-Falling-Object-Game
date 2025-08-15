@@ -114,6 +114,6 @@ body {
 
 @media (max-width:991px) {
     .game-area {
-        height: 100vh;
+        height: 90vh;
     }
 }

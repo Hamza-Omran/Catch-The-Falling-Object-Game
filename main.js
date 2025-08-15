@@ -13,7 +13,11 @@ let outerIntervalId = setInterval(() => {
     newObject();
 }, 2000);
 
+
 let obj;
+let fallSpeed = 2; // initial speed (pixels per tick)
+const maxFallSpeed = 15; // maximum speed
+const speedIncreaseStep = 0.3; // how much speed increases per catch
 
 function newObject(){
     obj = document.createElement("div");
@@ -23,10 +27,15 @@ function newObject(){
     let maxLeft = playArea.offsetWidth - 50;
     let left = Math.floor(Math.random() * (maxLeft + 1));
     obj.style.left = left + "px";
+    obj.style.top = '0px'; // start at top
     playArea.appendChild(obj);
 }
 
 let intervalId = setInterval(() => {
+    if (!obj) return;
+    // Move object down by fallSpeed pixels
+    let currentTop = parseFloat(obj.style.top || '0');
+    obj.style.top = (currentTop + fallSpeed) + 'px';
 
     let objRect = obj.getBoundingClientRect();
     let catcherRect = catcher.getBoundingClientRect();
@@ -39,6 +48,8 @@ let intervalId = setInterval(() => {
         obj.classList.add("hide");
         score++;
         scoreElem.textContent = score;
+        // Increase speed, but cap at maxFallSpeed
+        fallSpeed = Math.min(maxFallSpeed, fallSpeed + speedIncreaseStep);
         if (score > highestScore) {
             highestScore = score;
             highestScoreElem.textContent = highestScore;
@@ -50,7 +61,6 @@ let intervalId = setInterval(() => {
         clearInterval(intervalId);
         clearInterval(outerIntervalId);
         document.removeEventListener("keydown", moveCatcher);
-
         localStorage.setItem('highestScore', highestScore);
     }
 }, 10);
@@ -114,11 +124,12 @@ document.addEventListener("keydown", function(e) {
             o.remove();
         });
 
-    catcherLeft = Math.floor((playArea.offsetWidth - catcher.offsetWidth) / 2);
-    catcher.style.left = catcherLeft + "px";
+        catcherLeft = Math.floor((playArea.offsetWidth - catcher.offsetWidth) / 2);
+        catcher.style.left = catcherLeft + "px";
 
         score = 0;
         scoreElem.textContent = score;
+        fallSpeed = 2; // reset speed
 
         document.addEventListener("keydown", moveCatcher);
 
@@ -129,6 +140,10 @@ document.addEventListener("keydown", function(e) {
         }, 2000);
         intervalId = setInterval(() => {
             if (!obj) return;
+            // Move object down by fallSpeed pixels
+            let currentTop = parseFloat(obj.style.top || '0');
+            obj.style.top = (currentTop + fallSpeed) + 'px';
+
             let objRect = obj.getBoundingClientRect();
             let catcherRect = catcher.getBoundingClientRect();
             if (
@@ -140,6 +155,8 @@ document.addEventListener("keydown", function(e) {
                 obj.classList.add("hide");
                 score++;
                 scoreElem.textContent = score;
+                // Increase speed, but cap at maxFallSpeed
+                fallSpeed = Math.min(maxFallSpeed, fallSpeed + speedIncreaseStep);
                 if (score > highestScore) {
                     highestScore = score;
                     highestScoreElem.textContent = highestScore;
